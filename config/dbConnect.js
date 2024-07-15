@@ -3,8 +3,8 @@ const dotenv = require("dotenv")
 
 dotenv.config()
 
-console.log(`DB_URL: ${process.env.DB_URL}`);
-console.log(`DB_NAME: ${process.env.DB_NAME}`);
+// console.log(`DB_URL: ${process.env.DB_URL}`);
+// console.log(`DB_NAME: ${process.env.DB_NAME}`);
 
 
 const url =  `${process.env.DB_URL}/${process.env.DB_NAME}`
