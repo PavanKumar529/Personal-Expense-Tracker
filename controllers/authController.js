@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const userModel = require('../models/userModel');
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+
+
 const registerController = async (req, res, next) => {
     try {
         const { name, email, password, confirmPassword, tc } = req.body;
@@ -48,23 +50,84 @@ const loginController = async(req, res) => {
         }
         if(existingUser) {
             const isMatched = await bcrypt.compare(password, existingUser.password);
-            // console.log(isMatched);
+            console.log(isMatched);
             if(!isMatched) {
-                return res.status(400).send("Passwords are not matching")
+                res.status(400).send({ message: "Password or email are not matched", success: false })
             }
             else {
-                let token = jwt.sign(existingUser._id.toString(), "Pranavi")
-                return res.status(200).send({ token })
+                const userId = existingUser._id
+                let token = jwt.sign( { userId }, process.env.JWT_SECRET_KEY, { expiresIn: "7d"})
+                res.cookie("auth_token", token, {maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true })
+                // return res.status(200).send({ token })
+                return res.status(200).send({ message: "Logged in successfully", success: true})
             }
         }
         else{
-            res.status(400).send({ message: "User Not Found, Please Register", success: false })
+            return res.status(401).send({message: "User not found, Please register", success: false})
         }
     }
     catch(error) {
-        console.log(error)
+        console.error("Error in loginController:", error);
         res.status(500).send({ message: "Internal Server Error", success: false })
     }
 }
 
-module.exports = { registerController, loginController };
+const logoutController = async(req, res) => {
+    try {
+        res.clearCookie("auth_token")
+        return res.status(200).send({ message: "Logout Successfull" }) 
+    }
+    catch(error) {
+        console.log(error);
+        return res.status(500).send({ error: "Something Went Wrong", errMsg: error.message })
+    }
+}
+
+
+const getUserController = async(req, res) => {
+    try {
+        const {userId} = req
+        // console.log("userId",userId);
+        let userDetails = await userModel.findById(userId).select("-_id -password -__v")
+        if(!userDetails) {
+            return res.status(404).send({ message: "User not found", success: false });
+        }
+        else return res.status(200).send(userDetails)
+    }
+    catch(error) {
+        console.error("Error in getUser:", error);
+        return  res.status(500).send({message: "Something went to wrong", success: false})
+    }
+  }
+
+const updateUserController = async (req, res) => {
+    try {
+        const userId = req.userId
+        const data = req.body
+        const updatedUser = await userModel.findByIdAndUpdate(userId, { $set: { ...data } }, { new: true }).select("-_id -password -__v")
+        if(!updatedUser) {
+            return res.status(404).send({ message: "User not found", success: false });
+        }
+        return res.status(200).send({ message: "User Details Updated", userData: { response: updatedUser } });
+    }
+    catch (error) {
+        console.error("Error in updateUser:", error);
+        return res.status(500).send({ error: "Something went wrong", errorMsg: err.message })
+    }
+}
+
+
+const deleteUserController = async (req, res) => {
+    try {
+        const userId = req.userId
+        await userModel.findByIdAndDelete(userId)
+        res.clearCookie("auth_token")
+        return res.status(200).send({ message: "User Deleted" })
+    } 
+    catch (error) {
+        console.error("Error in deleteUser:", error);
+        return res.status(500).send({ error: "Something went wrong", errorMsg: err.message })
+    }
+}
+
+module.exports = { registerController, loginController, logoutController, getUserController, updateUserController, deleteUserController };

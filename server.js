@@ -3,7 +3,8 @@ const dotenv = require("dotenv");
 const dbConnect = require("./config/dbConnect");
 const userRouter = require("./routes/authRoutes");
 const path = require('path');
-
+// const expenseRouter = require("./routes/expenseRoutes");
+const cookieParser = require("cookie-parser")
 // Load environment variables from .env file
 dotenv.config();
 
@@ -12,7 +13,7 @@ const app = express();
 
 // middleware 
 app.use(express.json());
-
+app.use(cookieParser())
 
 // Retrieve environment variables
 const PORT = process.env.PORT || 4000;
@@ -27,6 +28,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // endpoints and define routes
 app.use('/api/auth', userRouter);
+
+
 
 // demo api
 app.get("/", (req, res) => {
