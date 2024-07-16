@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerController } = require('../controllers/authController');
+const { registerController, loginController } = require('../controllers/authController');
 const multer = require('multer');
 
 const userRouter = express.Router();
@@ -18,6 +18,6 @@ const upload = multer({ storage });
 
 // User registration route with file upload middleware
 userRouter.post('/register', upload.single('image'), registerController);
-
+userRouter.post("/login", loginController)
 
 module.exports = userRouter;
