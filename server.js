@@ -4,7 +4,10 @@ const dbConnect = require("./config/dbConnect");
 const userRouter = require("./routes/authRoutes");
 const path = require('path');
 // const expenseRouter = require("./routes/expenseRoutes");
-const cookieParser = require("cookie-parser")
+const cookieParser = require("cookie-parser");
+const otpRouter = require("./routes/otpRoutes");
+
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -28,6 +31,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // endpoints and define routes
 app.use('/api/auth', userRouter);
+app.use('/api/otp', otpRouter);
 
 
 
