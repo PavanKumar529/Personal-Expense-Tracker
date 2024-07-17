@@ -32,16 +32,40 @@ const otpGenerateController = async (req, res) => {
             from: "pavankumarkuruva529@gmail.com",
             to: user.email,
             subject: "The Personal-Expense-Tracker App",
-            text: `Dear ${user.name},
+            // text: `Dear ${user.name},
+            // Please use the following One Time Password to verify your login id and create your profile.
+            // OTP: ${otp}.
 
-            ${otp} is your one time password (OTP).
-            Hey this is a personal-expense-tracker app
-
-            Please enter the OTP to proceed. OTP valid for 5min
-            Do not share your otp with anyone.
+            // Please enter the OTP to proceed. OTP valid for 5min
+            // Do not share your otp with anyone.
             
-            Thank you
-            Team Pavan Kumar` 
+            // Thank you
+            // Team Pavan Kumar` 
+            html: `
+                <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+                    <h2>Dear ${user.name},</h2>
+                    <p>Please use the following One Time Password to verify your login ID and create your profile.</p>
+                    <p><strong>OTP: ${otp}</strong></p>
+                    <p>Please enter the OTP to proceed. OTP is valid for 5 minutes. Do not share your OTP with anyone.</p>
+                    <div style="display: flex; gap: 15px; margin-top: 10px; jsutify-content: center">
+                        <span style="font-weight: bold; margin-bottom: 10px;">Stay Connected</span>                        
+                        <a href="https://www.linkedin.com/in/pavan-kumar529/" target="_blank" style="text-decoration: none;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="32" height="32" style="border-radius: 50%; padding: 5px;" />
+                        </a>
+                        <a href="https://www.instagram.com/pavan_kumar_kuruva/" target="_blank" style="text-decoration: none;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384031.png" alt="Instagram" width="32" height="32" style="border-radius: 50%; padding: 5px;" />
+                        </a>
+                        <a href="https://x.com/PavanKumar9112" target="_blank" style="text-decoration: none;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/124/124021.png" alt="Twitter" width="32" height="32" style="border-radius: 50%; padding: 5px;" />
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=100010023038008" target="_blank" style="text-decoration: none;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook" width="32" height="32" style="border-radius: 50%; padding: 5px;" />
+                        </a>
+                    </div>
+
+                    <p style="margin-top: 20px;">Thank you,<br>Team Pavan Kumar</p>
+                </div>
+            `
         }
         let isCreated = await otpModel.findOne({ userId });
         if (isCreated) {
