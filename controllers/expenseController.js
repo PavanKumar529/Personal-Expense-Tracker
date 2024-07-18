@@ -31,9 +31,9 @@ const getExpenseController = async(req, res) => {
     // res.status(201).send({message: "Expense is Getting", success: false })
     try {
         // const expenses = await expenseModel.find({ userId: req.userId._id });
-        const expenses = await expenseModel.find({ });
+        const expenses = await expenseModel.find({});
         res.status(200).json({ message: "Expenses are successfully fetched", success: true, expenses });
-    } 
+    }
     catch (error) {
         console.log(error);
         res.status(500).send({ message: "Internal Server Error", success: false, error: error.message });
