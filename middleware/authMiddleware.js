@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 // const dotenv = require("dotenv")
 
+
 // dotenv.config()
 
 const authMiddleware = async (req, res, next) => {
@@ -21,10 +22,13 @@ const authMiddleware = async (req, res, next) => {
     try {
         const { userId } = jwt.verify(token, process.env.JWT_SECRET_KEY);
         // console.log("Verified userId:", userId);
-
+        if(!userId) {
+            return res.status(401).send({ message: "User not found", success: false });
+        }
         req.userId = userId;
         next();
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("Token verification error:", error);
         return res.status(401).send({ message: "Invalid token", success: false });
     }
