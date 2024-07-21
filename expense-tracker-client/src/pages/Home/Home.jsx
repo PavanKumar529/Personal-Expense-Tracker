@@ -5,9 +5,8 @@ import PrivateNabar from "../../components/Navbars/ProtectNav/PrivateNavbar"
 const Home = () => {
   return (
     <div>
-      Home
-      <PublicNavbar/>
       <PrivateNabar/>
+      <PublicNavbar/>
     </div>
   );
 };

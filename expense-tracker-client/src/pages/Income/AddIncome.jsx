@@ -1,11 +1,11 @@
 import React from 'react'
 
-const SignIn = () => {
+const AddIncome = () => {
   return (
     <div className='text-3xl font-bold'>
-      SignIn
+      AddIncome
     </div>
   )
 }
 
-export default SignIn
+export default AddIncome
